@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 import sys
 import socket
 import struct
@@ -23,13 +24,19 @@ def arguments():
     global args
 
     parser = argparse.ArgumentParser(description='File Receiver.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('file', help="Filename to be saved.")
+    parser.add_argument('filename', help="Filename to be saved.")
     parser.add_argument('-p', '--port', help="Port where the sender will connect.", default=8000, type=int)
+    parser.add_argument('-o', '--overwrite', help="Overwrite existing file.", action='store_true')
     #parser.add_argument('-s', '--size', help="Blocks' size in bytes to be received.", default=256, type=int)
     args = parser.parse_args()
 
 if __name__ == '__main__':
     arguments()
+    
+    if not args.overwrite and os.path.exists(args.filename):
+        print("File already exists.")
+        exit(1)
+        
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR, 1)
@@ -56,4 +63,3 @@ if __name__ == '__main__':
         print("")
 
     conn.close()
-    #print(data)
