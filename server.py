@@ -16,7 +16,8 @@ def loadbar(total, current, tiles=10):
         else:
             print(" ", end="")
 
-    print("]", end="\r")
+    print("]", end="")
+    print("\t{}/{}".format(current,total),end="\r")
 
 def arguments():
     global args
